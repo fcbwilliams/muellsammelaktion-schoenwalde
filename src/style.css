@@ -69,20 +69,25 @@ main { position: relative; z-index: 1; }
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: calc(env(safe-area-inset-top) + 1rem) var(--pad) 2.5rem;
+  padding: calc(env(safe-area-inset-top) + 1.4rem) var(--pad) 2rem;
   position: relative;
   pointer-events: none;   /* let drag-to-spin reach the canvas */
 }
+/* Phone composition: headline at the top, actions at the foot, and the middle
+   band left clear so the model sits at about the centre of the screen. */
+.hero__inner { display: flex; flex-direction: column; justify-content: space-between; flex: 1; }
+.hero__top, .hero__bottom { width: 100%; }
 /* Scrim so the copy stays readable over whatever part of the model is behind it. */
 .hero::before {
   content: "";
   position: absolute; inset: 0;
   /* Stays fully clear of the model, then ramps hard behind the copy - an
      early, gentle ramp just veils the diorama and makes it look hazy. */
+  /* Scrim at both ends, clear through the middle where the model sits. */
   background: linear-gradient(180deg,
-    transparent 0%, transparent 40%,
-    rgba(253,246,233,.55) 54%, rgba(253,246,233,.94) 70%, var(--cream) 84%);
+    rgba(253,246,233,.96) 0%, rgba(253,246,233,.90) 29%, rgba(253,246,233,0) 47%,
+    rgba(253,246,233,0) 59%, rgba(253,246,233,.78) 75%,
+    rgba(253,246,233,.97) 90%, var(--cream) 100%);
   z-index: -1;
 }
 
@@ -264,13 +269,15 @@ h2 {
     justify-content: center;
     padding-block: 4rem;
   }
+  /* Back to a single flowing column on wide screens. */
+  .hero__inner { display: block; flex: none; }
   .hero::before {
     background: linear-gradient(100deg,
       rgba(253,246,233,.97) 0%, rgba(253,246,233,.93) 26%,
       rgba(253,246,233,.45) 44%, rgba(253,246,233,0) 56%);
   }
   .hero__inner { margin: 0 0 0 max(2rem, 6vw); }
-  .scroll-hint { text-align: left; margin-left: max(2rem, 6vw); }
+  .scroll-hint { text-align: left; }
 
   .sheet { padding-inline: var(--pad); border-radius: 2rem 2rem 0 0; }
   .block { max-width: 44rem; padding: 3.2rem 0; }
@@ -282,6 +289,5 @@ h2 {
 
 @media (min-width: 64rem) {
   .hero__inner { margin-left: max(3rem, 9vw); }
-  .scroll-hint { margin-left: max(3rem, 9vw); }
   .block, .block--accent, .block--cta, .foot { max-width: 48rem; }
 }

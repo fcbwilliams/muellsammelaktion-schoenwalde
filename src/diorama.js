@@ -145,7 +145,9 @@ export class Diorama {
     // Shifting the frustum window is how the model is lifted clear of the copy
     // on phones: unlike aiming the camera off-centre it moves the image without
     // skewing the perspective.
-    if (portrait) this.camera.setViewOffset(w, h, 0, Math.round(h * 0.26), w, h);
+    // Portrait: sit the model at roughly the vertical centre, between the
+    // headline above and the actions below.
+    if (portrait) this.camera.setViewOffset(w, h, 0, Math.round(h * 0.02), w, h);
     else this.camera.clearViewOffset();
 
     // Near/far track the framing. A tight range is what gives the depth-based
