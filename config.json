@@ -1,0 +1,51 @@
+{
+  "_comment": "Grundschule Schönwalde-Siedlung, Sachsenweg 24, 14621 Schönwalde-Glien",
+  "placeName": "Schule Schönwalde, Sachsenweg",
+  "lat": 52.6023057,
+  "lon": 13.1300374,
+  "radiusMetres": 200,
+  "buildingOverrides": {
+    "_comment": "Per-OSM-way tweaks matched against the aerial photo. roof: gable|flat|round; wallGroup/roofGroup pick a palette group.",
+    "111211784": {
+      "height": 9.5,
+      "roof": "flat",
+      "school": true,
+      "note": "Hauptgebäude, Sachsenweg 24 - graues Flachdach",
+      "wallGroup": "schoolWall",
+      "roofGroup": "schoolRoof"
+    },
+    "400004343": {
+      "height": 4.5,
+      "roof": "flat",
+      "school": true,
+      "note": "kleiner Anbau am Hauptgebaeude",
+      "wallGroup": "schoolWall",
+      "roofGroup": "schoolRoof"
+    },
+    "111211786": {
+      "height": 8.5,
+      "roof": "flat",
+      "school": true,
+      "note": "zweiter Unterrichtsblock - Flachdach",
+      "wallGroup": "schoolWall",
+      "roofGroup": "schoolRoof"
+    },
+    "111211785": {
+      "height": 4.6,
+      "roof": "apex",
+      "rise": 1.8,
+      "school": true,
+      "wallGroup": "schoolWall",
+      "roofGroup": "roof",
+      "note": "Mensa - niedrig, rotes Fächerdach mit flacher Spitze, eine runde Seite"
+    },
+    "111211776": {
+      "height": 9.5,
+      "roof": "flat",
+      "school": true,
+      "note": "Sporthalle - Flachdach",
+      "wallGroup": "schoolWall",
+      "roofGroup": "hallRoof"
+    }
+  }
+}

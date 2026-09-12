@@ -1,0 +1,22 @@
+{
+  "name": "litter-pick-site",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "osm:fetch": "node tools/fetch-osm.mjs",
+    "osm:build": "node tools/build-scene.mjs",
+    "osm": "npm run osm:fetch && npm run osm:build",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:single": "vite build && node tools/inline.mjs"
+  },
+  "dependencies": {
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "earcut": "^3.0.0",
+    "vite": "^5.4.0"
+  }
+}
