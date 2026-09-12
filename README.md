@@ -33,4 +33,14 @@ also works when opened directly from disk.
 Building heights are estimated — no building in this extract carries height
 tags. Per-building corrections live in `config.json` under `buildingOverrides`.
 
+## Live site
+
+https://fcbwilliams.github.io/muellsammelaktion-schoenwalde/
+
+Deployed by `.github/workflows/deploy.yml` on every push to `main`.
+
+`npm run qr` regenerates `qr/website.png` (1600 px) and `qr/website.svg` for
+posters and handouts. The script decodes its own output to confirm the image
+actually scans.
+
 Map data © OpenStreetMap contributors, ODbL.
