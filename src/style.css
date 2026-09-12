@@ -80,7 +80,11 @@ main { position: relative; z-index: 1; }
 /* Scrim so the copy stays readable over whatever part of the model is behind it. */
 .hero::before {
   content: "";
-  position: absolute; inset: 0;
+  position: absolute; left: 0; right: 0; top: 0;
+  /* Reaches past the hero so the cream continues *behind* the sheet's rounded
+     top corners. Otherwise those two notches are holes onto the fixed canvas,
+     which show as gaps the moment the page is scrolled. */
+  bottom: calc(-1 * var(--radius) - 2px);
   /* Stays fully clear of the model, then ramps hard behind the copy - an
      early, gentle ramp just veils the diorama and makes it look hazy. */
   /* Scrim at both ends, clear through the middle where the model sits. */
@@ -169,6 +173,7 @@ h1 em::after {
 /* ──────────────────────────────────────────────────────────── sheet ─────── */
 .sheet {
   position: relative;
+  z-index: 1;
   background: var(--cream);
   border-radius: var(--radius) var(--radius) 0 0;
   padding: .5rem var(--pad) 0;
@@ -272,9 +277,15 @@ h2 {
   /* Back to a single flowing column on wide screens. */
   .hero__inner { display: block; flex: none; }
   .hero::before {
-    background: linear-gradient(100deg,
-      rgba(253,246,233,.97) 0%, rgba(253,246,233,.93) 26%,
-      rgba(253,246,233,.45) 44%, rgba(253,246,233,0) 56%);
+    /* Two layers: the side scrim that keeps the copy legible, plus a bottom
+       fade that runs the full width so the sheet's corners always meet cream,
+       not canvas. */
+    background:
+      linear-gradient(180deg, transparent 0%, transparent 76%,
+        rgba(253,246,233,.72) 90%, var(--cream) 100%),
+      linear-gradient(100deg,
+        rgba(253,246,233,.97) 0%, rgba(253,246,233,.93) 26%,
+        rgba(253,246,233,.45) 44%, rgba(253,246,233,0) 56%);
   }
   .hero__inner { margin: 0 0 0 max(2rem, 6vw); }
   .scroll-hint { text-align: left; }

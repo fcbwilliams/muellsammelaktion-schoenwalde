@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { PALETTE } from './palette.js';
 import { loadScene } from './scene-loader.js';
-import { createComposite } from './outline.js';
+import { createComposite, fullscreenPass } from './outline.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { buildTrees } from './trees.js';
 import { createAgents } from './agents.js';
 
@@ -65,7 +66,18 @@ export class Diorama {
 
     this.rtColor = null;
     this.rtNormal = null;
+    this.rtPost = null;
     this.composite = createComposite();
+    // The ink outlines are drawn per-pixel by the composite, so multisampling
+    // the scene cannot smooth them - they only exist after that pass. FXAA
+    // runs on the finished image instead, so geometry edges and outlines are
+    // both anti-aliased for the cost of one extra full-screen pass.
+    this.fxaa = fullscreenPass(new THREE.ShaderMaterial({
+      uniforms: THREE.UniformsUtils.clone(FXAAShader.uniforms),
+      vertexShader: FXAAShader.vertexShader,
+      fragmentShader: FXAAShader.fragmentShader,
+      depthTest: false, depthWrite: false,
+    }));
 
     this.#lights();
     this.#bindEvents();
@@ -181,6 +193,7 @@ export class Diorama {
 
     this.rtColor?.dispose();
     this.rtNormal?.dispose();
+    this.rtPost?.dispose();
     const samples = (!this.tier.low && !this.tier.coarse && pw * ph <= 1.7e6) ? 4 : 0;
     this.rtColor = new THREE.WebGLRenderTarget(pw, ph, {
       samples, type: THREE.UnsignedByteType,
@@ -192,6 +205,12 @@ export class Diorama {
     this.rtNormal = new THREE.WebGLRenderTarget(pw, ph, {
       depthTexture: depth, minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter,
     });
+    this.rtPost = new THREE.WebGLRenderTarget(pw, ph, {
+      minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter,
+      colorSpace: THREE.SRGBColorSpace,
+    });
+    this.fxaa.material.uniforms.tDiffuse.value = this.rtPost.texture;
+    this.fxaa.material.uniforms.resolution.value.set(1 / pw, 1 / ph);
 
     this.#frame();
 
@@ -253,8 +272,11 @@ export class Diorama {
     r.clear();
     r.render(this.scene, this.camera);
 
-    r.setRenderTarget(null);
+    r.setRenderTarget(this.rtPost);
     r.render(this.composite.scene, this.composite.camera);
+
+    r.setRenderTarget(null);
+    r.render(this.fxaa.scene, this.fxaa.camera);
   }
 
   #tick = () => {

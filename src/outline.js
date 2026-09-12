@@ -80,11 +80,17 @@ export function createComposite() {
     depthWrite: false,
   });
 
-  // Single full-screen triangle: cheaper than a quad and avoids the diagonal seam.
+  return fullscreenPass(material);
+}
+
+/**
+ * Wraps a material in a single full-screen triangle - cheaper than a quad and
+ * with no diagonal seam through the middle.
+ */
+export function fullscreenPass(material) {
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]), 3));
   geometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array([0, 0, 2, 0, 0, 2]), 2));
-
   const scene = new THREE.Scene();
   scene.add(new THREE.Mesh(geometry, material));
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
